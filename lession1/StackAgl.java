@@ -3,7 +3,10 @@
  */
 package com.yx.chinahadoop.lession1;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
+import java.util.Vector;
 
 /**
  * 栈相关
@@ -21,8 +24,16 @@ public class StackAgl {
 		// TODO Auto-generated method stub
 		String s = "6327*-+";
 		//int p = getLongestParentheseByLoop(s.toCharArray());
-		int p = reversePolishNotation(s.toCharArray());
-		System.out.println(p);
+		//int p = reversePolishNotation(s.toCharArray());
+		List<Integer> arr = new ArrayList<Integer>();
+		arr.add(2);
+		arr.add(7);
+		arr.add(5);
+		arr.add(6);
+		arr.add(4);
+		int p = calMaxHistogram(arr);
+		int[] height = {0,1,0,2,1,0,1,3,2,1,2,1};
+		System.out.println(trappingRainWater(height));
 
 	}
 	
@@ -116,7 +127,7 @@ public class StackAgl {
 	
 	/**
 	 * 用栈 实现 逆波兰序列 并打印计算过程
-	 * @param exp
+	 * @param exp  后序表达式
 	 * @return
 	 */
 	public static int reversePolishNotation(char[] exp){
@@ -164,11 +175,71 @@ public class StackAgl {
 	}
 	
 	/**
+	 * 计算直方图 最大矩形面积
+	 *   1-如果 h[i] > h[i-1]  那么从 i-1 到 i 的直方图最大面积 为 从0到i－1 面积＋ i－1 到 i的面积 
+	 *   2-如果 h[i] < h[i-1]  那么应该计算的最大面积为 从 0 到 i-1的 面积
+	 *   3- ［1］的时候 将满足条件的i 放入缓冲区
+	 *   4- ［2］的时候 将缓冲区最后放入的数据 与当前数据进行比较
+	 *       如果当前数据 > 缓冲区中最后放入的数据 那么可以计算最大面积 ＝ (栈顶元素 和 当前元素 的横向距离) * 缓冲区中最后放入的数据
+	 *       如果当前数据 < 缓冲区中最后放入的数据 那么将数据 压入缓冲区
+	 * @param height  矩形数组
+	 * @return
+	 */
+	public static int calMaxHistogram(List<Integer> height){
+		//为了使得 程序保持一致性
+		height.add(0);
+		//用于记录满足h[i] > h[i-1] 条件时的 i
+		Stack<Integer> s = new Stack<Integer>();
+		int ans = 0;
+		int tmp;
+		for(int i = 0 ; i < height.size(); ){
+			if(s.isEmpty() || height.get(i) > height.get(s.peek())){
+				s.push(i);
+				i++;
+			}else{
+				tmp = s.pop();
+				ans = max(ans, height.get(tmp) * (s.isEmpty()?i: i-s.peek()-1));
+			}
+		}
+		return ans;
+	}
+	
+	/**
+	 * 直方图蓄水量
+	 *  1－ 直方图最左边L 和 最右边R 为边界，类似外壁的概念不进行蓄水
+	 *  2-  如果 L > R R边为短边 令和 短边相邻的方柱为 X 短边为Y
+	 *      如果 X > 短边 那么 不能进行蓄水 丢弃 X
+	 *      如果 X < 短边 那么 可以蓄水  Y-X 水量
+	 *  3- 循环 ［1］和 ［2］ 直到 L ＝ R
+	 * @param rain 方柱数组
+	 * @return
+	 */
+	public static int trappingRainWater(int[] rain){
+		int left = 0;
+		int right = rain.length -1;
+		int trap = 0;
+		int secHeight = 0;
+		while(left < right){
+			if(rain[left] < rain[right]){
+				//如果 左边 小于 右边 那么 从左边开始 计算
+				secHeight = max(secHeight, rain[left]);
+				trap += (secHeight - rain[left]);
+				left++;
+			}else{
+				secHeight = max(secHeight, rain[right]);
+				trap += (secHeight - rain[right]);
+				right--;
+			}
+		}
+		return trap;
+	}
+	
+	/**
 	 * 判断是否操作符
 	 * @param op
 	 * @return
 	 */
-	public static boolean isOperator(char op){
+	private static boolean isOperator(char op){
 		return op == '+' || op == '-' || op == '*' || op == '/';
 	}
 	
@@ -178,7 +249,7 @@ public class StackAgl {
 	 * @param b
 	 * @return
 	 */
-	public static int max(int a, int b){
+	private static int max(int a, int b){
 		return a > b ? a: b;
 	}
 

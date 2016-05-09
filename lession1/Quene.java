@@ -35,7 +35,7 @@ public class Quene {
 	 * 初始化各个边距，点距
 	 * @param G
 	 */
-	public static void init(int[][] G){
+	private static void init(int[][] G){
 		G[0][4] = G[0][1] = 1;
 		G[1][5] = G[1][2] = G[1][0] = 1;
 		G[2][6] = G[2][3] = G[2][1] = 1;
@@ -56,15 +56,15 @@ public class Quene {
 	
 	/**
 	 * 计算 从 编号为 0 的元素 到 编号为 end 的元素的 最短路径的 条数
-	 * @param G
-	 * @param end
+	 * @param G 路径数组
+	 * @param end  截至到哪个位置
 	 * @return
 	 */
 	public static int Calc(int[][] G, int end){
 		// 记录从 from  到 i 位置 的 总步数
-		int[] step = new int[16];
+		int[] step = new int[N];
 		// 记录从 from 到 i位置的 总路径条数
-		int[] stepNum = new int[16];
+		int[] stepNum = new int[N];
 		stepNum[0] = 1;
 		//当前搜索的节点
 		Queue<Integer> q = new LinkedList<Integer>();
@@ -104,10 +104,10 @@ public class Quene {
 	/**
 	 * 拓扑 排序辅助函数
 	 *   用来生成 拓扑数组 和 入度 数组
-	 * @param G
-	 * @param indegree
+	 * @param G 拓扑数组
+	 * @param indegree  入度数组
 	 */
-	public static void initTopSort(int[][] G, int[] indegree){
+	private static void initTopSort(int[][] G, int[] indegree){
 		G[0][6] = G[0][5] = G[0][1] = 1;
 		G[2][0] = G[2][3] = 1;
 		G[3][5] = 1;
@@ -132,9 +132,9 @@ public class Quene {
 	 *   1-找出入度为 0 的元素
 	 *   2-将和［1］中元素有连通关系的 元素 入度－1 
 	 *   3－重复 ［1］和 ［2］
-	 * @param G
-	 * @param indegree
-	 * @param sort
+	 * @param G 拓扑数组
+	 * @param indegree 入度数组
+	 * @param sort  排序数组
 	 */
 	public static void topsort(int[][] G, int[] indegree, int[] sort){
 		// 存放 degree 为 0 的 元素

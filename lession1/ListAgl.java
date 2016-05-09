@@ -11,7 +11,7 @@ import java.util.Random;
  * @github https://github.com/GladiusK/chinahadoop-Algorithm
  *
  */
-public class List {
+public class ListAgl {
 
 	/**
 	 * @param args
@@ -48,10 +48,10 @@ public class List {
 	
 	/**
 	 * 创建初始化 列表辅助函数
-	 * @param cnt
+	 * @param cnt 链表长度
 	 * @return
 	 */
-	public static ListNode  createNode(int cnt){
+	private static ListNode  createNode(int cnt){
 		ListNode head = new ListNode(0);
 		Random rd = new Random();
 		ListNode cur;
@@ -268,7 +268,12 @@ public class List {
 		}
 	}
 	
-	public static void swap(ListNode p1, ListNode p2){
+	/**
+	 * 交换位置辅助函数
+	 * @param p1
+	 * @param p2
+	 */
+	private static void swap(ListNode p1, ListNode p2){
 		ListNode tmp ;
 		tmp = p1;
 		p1 = p2;
@@ -280,7 +285,7 @@ public class List {
 	 * @param p
 	 * @return
 	 */
-	public static int calSize(ListNode p){
+	private static int calSize(ListNode p){
 		int i = 0;
 		while(p != null){
 			i++;
@@ -293,7 +298,7 @@ public class List {
 	 * 打印列表辅助函数 (不打印 头节点)
 	 * @param p
 	 */
-	public static void Print(ListNode p){
+	private static void Print(ListNode p){
 		ListNode tmp = p.next;
 		while(tmp != null){
 			System.out.print(tmp.val);
